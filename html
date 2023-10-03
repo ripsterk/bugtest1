@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Application</title>
+    <style>
+        .entry {
+            border: 1px solid #000;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            max-width: 300px;
+        }
+
+        .form-container label,
+        .form-container textarea,
+        .form-container input {
+            margin-bottom: 10px;
+        }
+
+        #message {
+            resize: both;
+            overflow: auto;
+        }
+
+
+        .settings-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-left: 10px;
+        }
+
+        .settings-button {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .settings-dropdown {
+            position: absolute;
+            top: 30px;
+            right: 0;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px;
+            display: none;
+        }
+
+        .color-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="gray">
+    <h1>Sample Application to Post Messages on a Web Page</h1>
+    <p>The data is lost when the page is reloaded—this is intentional.</p>
+
+    <div class="form-container">
+        <label for="name">Name:</label>
+        <input type="text" id="name" placeholder="Enter your name">
+
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" placeholder="Enter a subject">
+
+        <label for="message">Message:</label>
+        <textarea id="message" placeholder="Enter your message" rows="4"></textarea>
+
+        <button id="submitBtn">Submit</button>
+        <button id="clearBtn">Clear</button> 
+    </div>
+
+    <div class="settings-container">
+        <button class="settings-button" id="settings-button" oncontextmenu="return changeBackgroundColor(event)">&#9881;</button>
+        <div class="settings-dropdown" id="color-options">
+            <button class="color-button" data-color="green">Green</button>
+            <button class="color-button" data-color="blue">Blue</button>
+            <button class="color-button" data-color="gray">Gray</button>
+            <button class="color-button" data-color="red">Red</button>
+            <button class="color-button" data-color="yellow">Yellow</button>
+        </div>
+    </div>
+
+    <div id="entries"></div>
+
+    <script>
+        const settingsButton = document.getElementById("settings-button");
+        const colorOptions = document.querySelectorAll(".color-button");
+        const clearButton = document.getElementById("clearBtn");
+        const subjectInput = document.getElementById("subject");
+
+        settingsButton.addEventListener("click", () => {
+            const dropdown = document.getElementById("color-options");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        colorOptions.forEach(option => {
+            option.addEventListener("click", () => {
+                const selectedColor = option.getAttribute("data-color");
+                document.body.style.backgroundColor = selectedColor;
+                if (selectedColor === "yellow") {
+                    option.style.display = "none"; 
+                }
+            });
+        });
+
+
+
+        clearButton.addEventListener("click", () => {
+            subjectInput.value = ".clear()"; 
+        });
+
+
+        document.getElementById("submitBtn").addEventListener("click", function () {
+            const name = document.getElementById("name").value;
+            const subject = document.getElementById("subject").value;
+            const message = document.getElementById("message").value;
+            const entries = document.getElementById("entries");
+            const entry = document.createElement("div");
+            entry.className = "entry";
+            entry.innerHTML = `<strong>Name:</strong> ${name}<br><strong>Subject:</strong> ${subject}<br><strong>Message:</strong><br>${message}`;
+
+
+            entries.appendChild(entry);
+
+
+            document.getElementById("name").value = "";
+            document.getElementById("subject").value = "";
+            document.getElementById("message").value = "";
+        });
+    </script>
+</body>
+</html>
